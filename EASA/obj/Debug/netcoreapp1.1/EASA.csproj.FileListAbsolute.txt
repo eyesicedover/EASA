@@ -1,0 +1,11 @@
+C:\Users\epicodus\Desktop\EASA\EASA\bin\Debug\netcoreapp1.1\EASA.deps.json
+C:\Users\epicodus\Desktop\EASA\EASA\bin\Debug\netcoreapp1.1\EASA.runtimeconfig.json
+C:\Users\epicodus\Desktop\EASA\EASA\bin\Debug\netcoreapp1.1\EASA.runtimeconfig.dev.json
+C:\Users\epicodus\Desktop\EASA\EASA\bin\Debug\netcoreapp1.1\EASA.dll
+C:\Users\epicodus\Desktop\EASA\EASA\bin\Debug\netcoreapp1.1\EASA.pdb
+C:\Users\epicodus\Desktop\EASA\EASA\obj\Debug\netcoreapp1.1\EASA.csprojResolveAssemblyReference.cache
+C:\Users\epicodus\Desktop\EASA\EASA\obj\Debug\netcoreapp1.1\EASA.csproj.CoreCompileInputs.cache
+C:\Users\epicodus\Desktop\EASA\EASA\obj\Debug\netcoreapp1.1\EASA.AssemblyInfoInputs.cache
+C:\Users\epicodus\Desktop\EASA\EASA\obj\Debug\netcoreapp1.1\EASA.AssemblyInfo.cs
+C:\Users\epicodus\Desktop\EASA\EASA\obj\Debug\netcoreapp1.1\EASA.dll
+C:\Users\epicodus\Desktop\EASA\EASA\obj\Debug\netcoreapp1.1\EASA.pdb

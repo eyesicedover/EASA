@@ -1,0 +1,17 @@
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\bin\Debug\netcoreapp2.0\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\bin\Debug\netcoreapp2.0\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\bin\Debug\netcoreapp2.0\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\bin\Debug\netcoreapp2.0\EASA.Tests.deps.json
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\bin\Debug\netcoreapp2.0\EASA.Tests.runtimeconfig.json
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\bin\Debug\netcoreapp2.0\EASA.Tests.runtimeconfig.dev.json
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\bin\Debug\netcoreapp2.0\EASA.Tests.dll
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\bin\Debug\netcoreapp2.0\EASA.Tests.pdb
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\bin\Debug\netcoreapp2.0\EASA.dll
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\bin\Debug\netcoreapp2.0\EASA.pdb
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\obj\Debug\netcoreapp2.0\EASA.Tests.csprojResolveAssemblyReference.cache
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\obj\Debug\netcoreapp2.0\EASA.Tests.csproj.CoreCompileInputs.cache
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\obj\Debug\netcoreapp2.0\EASA.Tests.AssemblyInfoInputs.cache
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\obj\Debug\netcoreapp2.0\EASA.Tests.AssemblyInfo.cs
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\obj\Debug\netcoreapp2.0\EASA.Tests.csproj.CopyComplete
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\obj\Debug\netcoreapp2.0\EASA.Tests.dll
+C:\Users\epicodus\Desktop\EASA\EASA.Tests\obj\Debug\netcoreapp2.0\EASA.Tests.pdb
