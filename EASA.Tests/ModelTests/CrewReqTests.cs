@@ -14,13 +14,27 @@ namespace EASA.Tests
         public void GetDuration_ReturnsDuration_Int()
         {
             //Arrange
-            var req = new CrewReq();
+            var req = new CrewReq(12, 30);
 
             //Act
-            var result = req.Duration = 12;
+            var result = req.Duration;
 
             //Assert
             Assert.AreEqual(12, result);
+        }
+
+        [TestMethod]
+        public void CalcAstronauts_ReturnNumAstronautsNeeded_Double()
+        {
+            //Arrange
+            var mission = new CrewReq(2, 120);
+
+            //Act
+            var result = mission.CalcAstronauts();
+
+            //Assert
+            Assert.AreEqual(6, result);
+
         }
     }
 }
