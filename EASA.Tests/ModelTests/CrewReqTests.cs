@@ -33,8 +33,7 @@ namespace EASA.Tests
             var result = mission.CalcAstronauts();
 
             //Assert
-            Assert.AreEqual(6, result);
-
+            Assert.AreEqual(2, result);
         }
     }
 }
