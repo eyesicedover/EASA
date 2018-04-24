@@ -27,13 +27,13 @@ namespace EASA.Tests
         public void CalcAstronauts_ReturnNumAstronautsNeeded_Double()
         {
             //Arrange
-            var mission = new CrewReq(2, 120);
+            var mission = new CrewReq(48, 288);
 
             //Act
             var result = mission.CalcAstronauts();
 
             //Assert
-            Assert.AreEqual(2, result);
+            Assert.AreEqual(3, result);
         }
     }
 }

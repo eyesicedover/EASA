@@ -7,11 +7,11 @@ namespace EASA.Models
 {
     public class CrewReq
     {
-        public int Duration { get; set; }
-        public int TaskCount { get; set; }
+        public double Duration { get; set; }
         public double AstronautCount { get; set; }
+        public int TaskCount { get; set; }
 
-        public CrewReq(int duration, int taskCount)
+        public CrewReq(double duration, int taskCount)
         {
             Duration = duration;
             TaskCount = taskCount;
@@ -19,8 +19,9 @@ namespace EASA.Models
 
         public double CalcAstronauts()
         {
-            double tasksPerDay = (TaskCount / Duration);
-            AstronautCount = Math.Ceiling(tasksPerDay / 40);
+            double tasksPerHour = (TaskCount / 4);
+            double hours = (Duration * .66);
+            AstronautCount = Math.Ceiling(tasksPerHour / hours);
             return AstronautCount;
         }
     }
