@@ -21,7 +21,6 @@ namespace EASA.Tests
 
             //Assert
             Assert.AreEqual(595, result);
-          
         }
     }
 }

@@ -1,0 +1,540 @@
+
+<html>
+<head>
+   <title>JavaScript Navigator - Great Circle Sailing</title>
+<script>
+
+<!-- hide this script tag's contents from old browsers
+
+//** function to change the side of a Latitude **//
+function swaplat(slat)
+{
+    if (slat.value == "North")
+    {slat.value = "South"}
+    else
+    {slat.value = "North"}
+}
+
+//** function to change the side of a longitude **//
+function swaplon(slon)
+{
+    if (slon.value == "East")
+    {slon.value = "West"}
+    else
+    {slon.value = "East"}
+}
+
+
+//** funtion to clear form fields **//
+function clear(form)
+{
+    form.ilatdeg.value=""
+    form.ilatmin.value=""
+    form.ilatside.value="North"
+    form.ilondeg.value=""
+    form.ilonmin.value=""
+    form.ilonside.value="East"
+    form.flatdeg.value=""
+    form.flatmin.value=""
+    form.flatside.value="North"
+    form.flondeg.value=""
+    form.flonmin.value=""
+    form.flonside.value="East"
+    form.course.value=""
+    form.dist.value=""
+    form.constantx.value="0"
+    form.constantk.value="0"
+    form.wlatdeg.value="??"
+    form.wlatmin.value="??"
+    form.wlatside.value="??"
+    form.wlondeg.value=""
+    form.wlonmin.value=""
+    form.wlonside.value="East"
+}
+
+//** function to check if a field is number and within range **//
+
+function checkNumber(input, min, max, msg)
+
+{
+
+    msg = msg + " field has invalid data: " + input.value;
+
+
+
+    var str = input.value;
+
+    for (var i = 0; i < str.length; i++) {
+
+        var ch = str.substring(i, i + 1)
+
+        if ((ch < "0" || "9" < ch) && ch != '.') {
+
+            alert(msg);
+
+            return false;
+
+        }
+
+    }
+
+    var num = parseFloat(str)
+
+    if (num < min || max < num) {
+
+        alert(msg + " not in range [" + min + ".." + max + "]");
+
+        return false;
+
+    }
+
+    input.value = str;
+
+    return true;
+
+}
+
+//** function to change null field to zero **//
+
+function null2zero(invalue)
+
+{
+
+    if (invalue.value == null || invalue.value.length == 0 )
+        {invalue.value = 0}
+}
+
+
+
+//** Degree, Minute and Side to Degree (+/-) **//
+
+function dm2deg(indeg, inmin, inside)
+{
+var indegree = eval (indeg.value)
+var inminute = eval (inmin.value + '/60')
+var insign = 1
+    if (inside.value == "South" || inside.value == "West")
+    {insign = -1}
+var result = (indegree + inminute)*insign
+return result
+}
+//** Main function - Great Circle Sailing - Course and Distance **//
+function gcsail(form)
+{
+
+//** null fields to zero **//
+null2zero(form.ilatdeg)
+null2zero(form.ilatmin)
+null2zero(form.ilondeg)
+null2zero(form.ilonmin)
+null2zero(form.flatdeg)
+null2zero(form.flatmin)
+null2zero(form.flondeg)
+null2zero(form.flonmin)
+//** Validate Entries **//
+if (!checkNumber(form.ilatdeg, 0, 89, "Initial Latitude degree ") ||
+        !checkNumber(form.ilatmin, 0, 59.9999999, "Initial Latitude minute ")
+        )
+ {
+        form.dist.value = "Error";
+        return;
+    }
+if (!checkNumber(form.ilondeg, 0, 180, "Initial Longitude degree ") ||
+        !checkNumber(form.ilonmin, 0, 59.9999999, "Initial Longitude minute ")
+        )
+ {
+        form.dist.value = "Error";
+        return;
+    }
+if (!checkNumber(form.flatdeg, 0, 89, "Final Latitude degree ") ||
+        !checkNumber(form.flatmin, 0, 59.9999999, "Final Latitude minute ")
+        )
+ {
+        form.dist.value = "Error";
+        return;
+    }
+if (!checkNumber(form.flondeg, 0, 180, "Final Longitude degree ") ||
+        !checkNumber(form.flonmin, 0, 59.9999999, "Final Longitude minute ")
+        )
+ {
+        form.dist.value = "Error";
+        return;
+    }
+//** change to degrees **//
+var inlat = dm2deg(form.ilatdeg, form.ilatmin, form.ilatside)
+var inlon = dm2deg(form.ilondeg, form.ilonmin, form.ilonside)
+var fnlat = dm2deg(form.flatdeg, form.flatmin, form.flatside)
+var fnlon = dm2deg(form.flondeg, form.flonmin, form.flonside)
+//** handle single Point i.e. inlat=fnlat and inlon=fnlon **//
+if (inlat == fnlat && inlon==fnlon)
+{
+form.course.value = "error"
+form.dist.value = "Same Point"
+return
+}
+//** continue if not single point **//
+//** reduce D'long to less than 180 degree **//
+var dlon = (fnlon - inlon)
+var sgndlon = 0-(dlon/Math.abs(dlon))
+if (Math.abs(dlon) > 180)
+{dlon = (360 - Math.abs(dlon))*sgndlon}
+//** Calculate Distance **//
+//** change degree to radian **//
+var rinlat = inlat*Math.PI/180
+var rinlon = inlon*Math.PI/180
+var rfnlat = fnlat*Math.PI/180
+var rdlon = dlon*Math.PI/180
+var rgcdist = (Math.sin(rinlat)*Math.sin(rfnlat)
++Math.cos(rinlat)*Math.cos(rfnlat)*Math.cos(rdlon))
+rgcdist = Math.acos(rgcdist)
+var gcdist = rgcdist*180/Math.PI
+if (gcdist==180)
+{form.course.value = "error"
+form.dist.value = "1/2 world"
+return
+}
+var rincourse = (Math.sin(rfnlat)-Math.cos(rgcdist)*Math.sin(rinlat))
+/(Math.sin(rgcdist)*Math.cos(rinlat))
+rincourse = Math.acos(rincourse)
+incourse = rincourse*180/Math.PI
+if (dlon < 0)
+{incourse = 360 - incourse}
+form.course.value = incourse
+form.dist.value = Math.abs(gcdist)*60
+
+//** Calculate the value of constantx and constantk for way points calculation **//
+rincourse=incourse*Math.PI/180
+var rcontx = Math.atan(Math.sin(rinlat)*Math.tan(rincourse))
+if (Math.tan(rincourse) < 0)
+{ rcontx = rcontx+Math.PI }
+var rcontn=rinlon
+if (rinlon < 0)
+{ rcontn=rcontn+(2*Math.PI)}
+rcontx=rcontn-rcontx
+if (rcontx<0)
+{ rcontx=rcontx+(2*Math.PI)}
+if (rcontx > 2*Math.PI)
+{ rcontx = rcontx-(2*Math.PI)}
+form.constantx.value = rcontx
+var rcontk = Math.acos(Math.sin(rincourse)*Math.cos(rinlat))
+if (rcontk == Math.PI/2)
+{
+form.constantk.value="polar"
+return
+}
+rcontk = Math.abs(Math.tan(rcontk))
+form.constantk.value = rcontk
+}
+
+//** Function to calculate the way point Latitude by giving waypoint Longitude **//
+function waylat(form)
+{
+
+null2zero(form.wlondeg)
+null2zero(form.wlonmin)
+//** validate WayPoint Longitude Entries **//
+if (!checkNumber(form.wlondeg, 0, 180, "Way Point Longitude degree ") ||
+        !checkNumber(form.wlonmin, 0, 59.9999999, "Way Point Longitude minute ")
+        )
+ {
+        form.wlatdeg.value = "Error";
+        return;
+    }
+
+    if (form.constantk.value == "polar")
+    {
+    form.wlatdeg.value = "error"
+    form.wlatmin.value = "Polar"
+    form.wlatside.value = "track"
+    return
+    }
+    var winlon = dm2deg(form.wlondeg, form.wlonmin, form.wlonside)
+    var wlat = 0
+    var wrinlon = 0
+    var wrlat = 0
+    var x = eval (form.constantx.value)
+    var k = eval (form.constantk.value)
+    var z = 0
+    var wlatsign = 0
+    var wlatdeg = 0
+    var wlatmin = 0
+    var walat = 0
+    if (winlon < 0)
+    {winlon = winlon + 360}
+    wrinlon = winlon*Math.PI/180
+    z = wrinlon - x
+    if (z < 0)
+    { z = z + (2*Math.PI)}
+    wrlat = Math.atan(Math.sin(z)*k)
+    wlat = wrlat*180/Math.PI
+    walat = Math.abs(wlat)
+    wlatsign = 0
+    if (wlat != 0)
+    {wlatsign = wlat/walat}
+    wlatdeg = Math.floor(walat)
+    wlatmin = (walat-wlatdeg)*60
+    wlatmin = (Math.floor(wlatmin*1000))/1000
+    form.wlatdeg.value = wlatdeg
+    form.wlatmin.value = wlatmin
+    if (wlatsign < 0)
+    {form.wlatside.value = "South"}
+    else
+    {form.wlatside.value = "North"}
+}
+
+//** Function to calculate the whole Great Circle Track at 5 degree longitude intervals **//
+function waypoints(form)
+{
+   msgWindow=window.open("","msgWindow","toolbar=no,status=no,menubar=yes,scrollbars=yes,width=550,height=400")
+   msgWindow.document.open()
+   msgWindow.document.write("<html><head><title>Great Circel Sailing - Full Track</title></head>")
+   msgWindow.document.write("<body>")
+   msgWindow.document.write("<h3>Entire Greate Circle Track at 5 degree Longitude Intervals </h3><br>")
+    msgWindow.document.write("Please close this window for return to parent page<br><br>")
+    msgWindow.document.write("The form is rather slow due formatting of a table for better presentation<br><br>")
+   if (form.constantk.value == "polar")
+    {
+    msgWindow.document.write("Polar Track - No Way Point Calculation avilable ")
+    msgWindow.document.close()
+    return
+    }
+    var wplon = 0
+    var wplat = 0
+    var wprlon = 0
+    var wprlat = 0
+    var count = -180
+    var x = eval (form.constantx.value)
+    var k = eval (form.constantk.value)
+    var z = 0
+    var wpsign = 0
+    var wpdeg = 0
+    var wpmin = 0
+    var wpalat = 0
+    msgWindow.document.write("<table>")
+    while (count <= 180)
+    {
+    msgWindow.document.write("<tr><td>")
+    msgWindow.document.write("W. P. Long. = <td>")
+    msgWindow.document.write(Math.abs(count))
+    msgWindow.document.write("<td>")
+    if (count < 0)
+    {msgWindow.document.write(" W <td>")}
+    if (count > 0)
+    {msgWindow.document.write(" E <td>")}
+    if (count == 0)
+    {msgWindow.document.write(" <td>")}
+    msgWindow.document.write(" - W. P. Lat. = <td>")
+    wplon = count
+    if (wplon < 0)
+    {wplon = wplon + 360}
+    wprlon = wplon*Math.PI/180
+    z = wprlon - x
+    if (z < 0)
+    { z = z + (2*Math.PI)}
+    wprlat = Math.atan(Math.sin(z)*k)
+    wplat = wprlat*180/Math.PI
+    wpalat = Math.abs(wplat)
+    wpsign = 0
+    if (wplat != 0)
+    {wpsign = wplat/wpalat}
+    wpdeg = Math.floor(wpalat)
+    wpmin = (wpalat-wpdeg)*60
+    wpmin = Math.floor(wpmin*1000)
+    wpmin = wpmin/1000
+    wpdeg = wpdeg
+    msgWindow.document.write(wpdeg)
+    msgWindow.document.write(" - ")
+    msgWindow.document.write(wpmin)
+    msgWindow.document.write(" ' ")
+    if (wpsign < 0)
+    {msgWindow.document.write(" S </td>")}
+   if (wpsign == 0)
+    {msgWindow.document.write(" </td>")}
+    if (wpsign > 0)
+    {msgWindow.document.write(" N </td>")}
+    msgWindow.document.writeln("</tr>")
+    count = count + 5
+    }
+    msgWindow.document.write("</table>")
+    msgWindow.document.write("</body></html>")
+    msgWindow.document.close()
+
+}
+<!-- done hiding from old browsers -->
+
+</script>
+</head>
+<body text="#000000" bgcolor="#5FF7DB" link="#0000FF" vlink="#FF00FF" background="../backgrd.gif">
+
+<center><p><b><font COLOR="#0000FF"><font SIZE=+2>JavaScript Navigator
+- Great Circle Sailing</font></font></b></p></center>
+
+<center><p>
+<hr width="100%" ></p></center>
+
+<p>Below is a form using JavaScript that solve the Great Circle Sailing
+problem. <b>Please note that inputs with leading zeros will cause errors
+when processed by this script.</b></p>
+<b>The form is developed and tested with Netscape 2.02, it may not work properly
+ with Netscape 3.0 and MS Internet Explorer 3.0 </b></p>
+
+<p><form NAME="gcform">
+<input type="hidden" Name="constantx" value="0" size=12>
+<input type="hidden" Name="constantk" value="0" size=12>
+<b>Origin (Initial Position)</b>
+<br><br>
+<table>
+<tr><td>
+Latitude : <td>
+ <input TYPE="text" NAME="ilatdeg" SIZE=3 > <td> degrees <td>
+ <input TYPE="text" NAME="ilatmin" SIZE=5 > <td> minutes <td>
+ <input type="text" Name="ilatside" value="North" size=5> <td>
+ <input type="button" value="N/S" onclick="swaplat(form.ilatside)"> </td>
+ </tr>
+<tr><td>
+Longitude : <td>
+ <input TYPE="text" NAME="ilondeg" SIZE=3 > <td> degrees <td>
+ <input TYPE="text" NAME="ilonmin" SIZE=5 > <td> minutes <td>
+ <input type="text" Name="ilonside" value="East" size=5> <td>
+ <input type="button" value="E/W" onclick="swaplon(form.ilonside)"> </td>
+</tr></table>
+<br>
+<b>Destination (Final Position)</b>
+<br><br>
+<table>
+<tr><td>
+Latitude : <td>
+ <input TYPE="text" NAME="flatdeg" SIZE=3 > <td> degrees <td>
+ <input TYPE="text" NAME="flatmin" SIZE=5 > <td> minutes <td>
+ <input type="text" Name="flatside" value="North" size=5> <td>
+ <input type="button" value="N/S" onclick="swaplat(form.flatside)"> </td>
+</tr>
+<tr><td>
+Longitude : <td>
+ <input TYPE="text" NAME="flondeg" SIZE=3 > <td> degrees <td>
+ <input TYPE="text" NAME="flonmin" SIZE=5 > <td> minutes <td>
+ <input type="text" Name="flonside" value="East" size=5> <td>
+ <input type="button" value="E/W" onclick="swaplon(form.flonside)"> </td>
+</tr>
+</table>
+<br>
+<input TYPE="button" VALUE="Calculate" ONCLICK="gcsail(this.form)">
+<input type="button" value="Clear" onclick="clear(this.form)">
+<br>
+<br><b>Result :-</b>
+<br><br>
+<table>
+<tr><td>
+Initial Course <td> <input type="text" name="course" size=5> degrees true </td>
+</tr>
+<tr><td>
+Great Circle Distance <td> <input type="text" name="dist" size=10> nautical miles </td>
+</tr></table>
+<br>
+<b>
+WayPoint Calculation : -
+</b>
+<br>
+<br>
+<table>
+<tr><td>
+WayPoint Longitude : <td>
+ <input TYPE="text" NAME="wlondeg" SIZE=3 > <td> degrees <td>
+ <input TYPE="text" NAME="wlonmin" SIZE=5 > <td> minutes <td>
+ <input type="text" Name="wlonside" value="East" size=5> <td>
+ <input type="button" value="E/W" onclick="swaplon(form.wlonside)"> </td>
+</tr>
+<tr><td>
+WayPoint Latitude : <td>
+ <input TYPE="text" NAME="wlatdeg" value="??" SIZE=3 > <td> degrees <td>
+ <input TYPE="text" NAME="wlatmin" value="??" SIZE=5 > <td> minutes <td>
+ <input type="text" Name="wlatside" value="??" size=5> </td>
+</tr></table>
+<br>
+<br>
+<input type="button" Value="Calculate" onclick="gcsail(this.form),waylat(this.form)">
+ <input type="button" value="Full Track" onclick="gcsail(this.form),waypoints(this.form)">
+<br>
+</form></p>
+<hr width="100%" ></p>
+
+<p><b><font COLOR="#400080"><font SIZE=+1>Great Circle</font></font></b></p>
+<p><font COLOR="#800000">
+A great circle is defined as a circle on the earth's surface the plane of which passes
+ through the centre of the earth.
+<p>
+For navigation purposes :
+<br><br>
+<UL TYPE=circle>
+<LI>The great circle track is the shortest distance between two places on the
+ earth's surface.
+<br><LI>The great circle track appears as a straight line on Gnomonic (great circle) charts.
+<br><LI>The vertices of a great circle are the two points nearest to the poles which
+ have a course on the great circle track due EAST / WEST.
+</UL>
+</font>
+<p><b><font COLOR="#400080"><font SIZE=+1>Great Circle Sailing</font></font></b></p>
+<p><font COLOR="#800000">
+To follow a great circle track, the navigator needs to adjust the ship's course
+ continuously because the great circle track is a curve when plotted on a Mercator Chart.
+ Therefore, it is not really practicable to sail on an exact great circle route.
+<p>
+In order to take advantage of the shorter steaming distance of the great circle track, mariners
+usually divide a great circle track between the initial position and the destination
+ into smaller segments (way points) of about one to two day's steaming time and make course adjustment
+ at noon. The total distance is therefore the sum of the distances of those segments
+ calculated by means of <A HREF="msail.htm">Mercator Sailing</A>.
+<p>
+</font>
+<p><b><font COLOR="#400080"><font SIZE=+1>Composite Great Circle Sailing</font></font></b></p>
+<p><font COLOR="#800000">
+Although the great circle track is the shortest route between two locations, it also
+ usually enroutes closer to the pole (or to higher latitude) than the two places.
+<p>
+<IMG SRC="gc.gif" ALIGN=right>
+To avoid the danger of steaming on high latitude, which normally associates with
+ bad weather and icing, a careful master mariner will normally set a latitude limit on his
+ ocean passage plan. The ocean passage will thus consist of a first great circle track
+ with vertex at the latitude limit then sailing along that latitude until meeting
+ the vertex of a second great circle track leading to the destination. This type of
+ route is named as composite great circle route.
+<p>
+The easiest method to outline a composite greate circle route is by plotting it on
+a Gnomonic chart.
+<p>
+The figure on the right shows the relationship between the three types of route,
+ the rhumb line, the great circle and the composite great circle routes for the same
+ set of locations.
+</font>
+<p><b><font COLOR="#400080"><font SIZE=+1>What's new here?</font></font></b></p>
+<p><font COLOR="#800000">
+The most annoying part of the great circle sailing calculation is to find out the way
+ points along the great circle route. The traditional way is to determine the position
+ of the vertex and use Napier's rules to calculate individual way point's Latitude and
+ Longitude. This method is not really very complex but is not suitable for
+ computerization as a set of conditions will need to be established in order to determine
+ the side of the positions.
+<p>
+In this script, I use a formula which was derived by myself when I was working on board
+ as a Second Officer. This formula uses a simple sine relationship between Latitude and
+ Logitude which makes the way point calculation more suitable for computerization.
+ The formula is :-
+
+<BLOCKQUOTE><I>tan</I> Latitude = <I>sin</I> (Longitude - X) * <I>tan</I> K</BLOCKQUOTE>
+
+where X is the Longitude when the GC track crosses the equator from south to north
+<br>
+and K is the maximum Latitude of the GC track or Latitude of Vertex.
+<p>
+The Longitude value should be reduced to 360-degree notation measured from Greenwich towards
+ the East. e.g. 165 degrees West will be treat as 195 degrees.
+<p>
+By using the above formula, this script provides a full definition of great circle tracks
+ at 5-degree longitude intervals - the [Full Track] function of the form - as well as
+ the corresponding Latitude of any given Longitude.
+</font>
+<p>
+<a href="../index.htm"> <img src="../home.gif" border=0></a> <b><font COLOR="#0000FF"> [ <a href="../index.htm">Home</a> ? <img src="http://www.geocities.com/cgi-bin/counter/himarj" WIDTH=20 HEIGHT=10> ]
+</font></b></p>
+</body>
+</html>
